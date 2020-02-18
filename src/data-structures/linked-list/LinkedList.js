@@ -1,7 +1,71 @@
 import LinkedListNode from './LinkedListNode';
 import Comparator from '../../utils/comparator/Comparator';
 
-export default class LinkedList {
+export default function LinkedList(comparatorFunction) {
+  let head = null;
+  let tail = null;
+
+  const API = {
+    head,
+    tail,
+    prepend,
+    toArray,
+    toString,
+    compare: new Comparator(comparatorFunction),
+  };
+
+  return API;
+
+  /**
+   * @param {*} value
+   * @return {LinkedList}
+   */
+  function prepend(value) {
+    const newNode = LinkedListNode(value, head);
+
+    tail = tail || newNode;
+
+    head = newNode;
+
+    const newList = {
+      ...API,
+      head,
+      tail,
+    };
+
+    // console.log('head', newList);
+
+    return newList;
+  }
+
+  /**
+   * @return {LinkedListNode[]}
+   */
+  function toArray() {
+    const nodes = [];
+
+    let currentNode = head;
+
+    while (currentNode) {
+      nodes.push(currentNode);
+      currentNode = currentNode.next;
+    }
+
+    return nodes;
+  }
+
+  /**
+   * @param {function} [callback]
+   * @return {string}
+   */
+  function toString(callback) {
+    return toArray()
+      .map(node => node.toString(callback))
+      .toString();
+  }
+}
+
+export class LinkedLists {
   /**
    * @param {Function} [comparatorFunction]
    */
@@ -21,7 +85,7 @@ export default class LinkedList {
    */
   prepend(value) {
     // Make new node to be a head.
-    const newNode = new LinkedListNode(value, this.head);
+    const newNode = LinkedListNode(value, this.head);
     this.head = newNode;
 
     // If there is no tail yet let's make new node a tail.
@@ -37,7 +101,7 @@ export default class LinkedList {
    * @return {LinkedList}
    */
   append(value) {
-    const newNode = new LinkedListNode(value);
+    const newNode = LinkedListNode(value);
 
     // If there is no head yet let's make new node a head.
     if (!this.head) {
@@ -205,7 +269,9 @@ export default class LinkedList {
    * @return {string}
    */
   toString(callback) {
-    return this.toArray().map(node => node.toString(callback)).toString();
+    return this.toArray()
+      .map(node => node.toString(callback))
+      .toString();
   }
 
   /**

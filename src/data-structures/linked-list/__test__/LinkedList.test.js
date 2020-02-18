@@ -19,17 +19,23 @@ describe('LinkedList', () => {
     expect(linkedList.tail.next).toBeNull();
   });
 
-  it('should prepend node to linked list', () => {
-    const linkedList = new LinkedList();
+  it.only('should prepend node to linked list', () => {
+    const linkedList = LinkedList().prepend(1);
 
-    linkedList.prepend(2);
-    expect(linkedList.head.toString()).toBe('2');
-    expect(linkedList.tail.toString()).toBe('2');
+    expect(linkedList.head.toString()).toBe('1');
+    expect(linkedList.tail.toString()).toBe('1');
 
-    linkedList.append(1);
-    linkedList.prepend(3);
+    // TODO
+    // linkedList.append(1);
 
-    expect(linkedList.toString()).toBe('3,2,1');
+    // console.log(linkedList);
+
+    expect(
+      linkedList
+        .prepend(2)
+        .prepend(3)
+        .toString(),
+    ).toBe('3,2,1');
   });
 
   it('should delete node by value from linked list', () => {
@@ -142,9 +148,7 @@ describe('LinkedList', () => {
     const nodeValue1 = { value: 1, key: 'key1' };
     const nodeValue2 = { value: 2, key: 'key2' };
 
-    linkedList
-      .append(nodeValue1)
-      .prepend(nodeValue2);
+    linkedList.append(nodeValue1).prepend(nodeValue2);
 
     const nodeStringifier = value => `${value.key}:${value.value}`;
 
@@ -159,9 +163,7 @@ describe('LinkedList', () => {
     linkedList.append(1);
     expect(linkedList.find({ value: 1 })).toBeDefined();
 
-    linkedList
-      .append(2)
-      .append(3);
+    linkedList.append(2).append(3);
 
     const node = linkedList.find({ value: 2 });
 
@@ -182,7 +184,9 @@ describe('LinkedList', () => {
     expect(node).toBeDefined();
     expect(node.value.value).toBe(2);
     expect(node.value.key).toBe('test2');
-    expect(linkedList.find({ callback: value => value.key === 'test5' })).toBeNull();
+    expect(
+      linkedList.find({ callback: value => value.key === 'test5' }),
+    ).toBeNull();
   });
 
   it('should create linked list from array', () => {
